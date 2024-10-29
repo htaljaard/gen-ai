@@ -360,31 +360,6 @@ resource appService1 'Microsoft.Web/sites@2023-12-01' = {
           value: '@Microsoft.KeyVault(SecretUri=${domainSecret.properties.secretUri})'
         }
         {
-<<<<<<< HEAD
-          name: 'Serilog__MinimumLevel'
-          value: 'Information'
-        }
-        {
-          name: 'Serilog__Using:0'
-          value: 'Serilog.Sinks.Console'
-        }
-        {
-          name: 'Serilog__Using__1'
-          value: 'Serilog.Sinks.File'
-        }
-        {
-          name: 'Serilog__WriteTo__0__Name'
-          value: 'File'
-        }
-        // {
-        //   name: 'DocumentIntelligence__EndPoint'
-        //   value: '@Microsoft.KeyVault(SecretUri=${documentIntelligence.outputs.documentIntelligenceEndpoint})'
-        // }
-        // {
-        //   name: 'DocumentIntelligence__ApiKey'
-        //   value: '@Microsoft.KeyVault(SecretUri=${documentIntelligence.outputs.documentIntelligenceKey})'
-        // }
-=======
           name: 'Serilog:MinimumLevel'
           value: 'Information'
         }
@@ -400,7 +375,6 @@ resource appService1 'Microsoft.Web/sites@2023-12-01' = {
           name: 'Serilog:WriteTo:0:Name'
           value: 'Console'
         }
->>>>>>> 2b965f8 (Serilog and Document Intelligence)
       ]
       connectionStrings: [
         {
