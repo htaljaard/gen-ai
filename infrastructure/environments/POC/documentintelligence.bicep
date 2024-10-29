@@ -2,11 +2,7 @@
 param location string = resourceGroup().location
 
 @description('The SKU of the Document Intelligence resource.')
-<<<<<<< HEAD
 param skuName string = 'S0'
-=======
-param skuName string = 'F0'
->>>>>>> 2b965f8 (Serilog and Document Intelligence)
 
 param tags object = {}
 param uniquekey string
@@ -22,22 +18,6 @@ resource keyvault 'Microsoft.KeyVault/vaults@2024-04-01-preview' existing = {
   name: keyVaultName
 }
 
-<<<<<<< HEAD
-// module pepModule '../../utility/pep.bicep' = {
-//   name: 'pepModule'
-//   params: {
-//     vnetResourceId: vnetResourceId
-//     uniquekey: uniquekey
-//     tags: tags
-//     location: location
-//     subnetId: subnetId
-//     resourceType: resourceType
-//     privateEndPoint: privateEndPoint
-//     linkedServiceId: documentIntelligence.id
-//     pepName: 'docintel'
-//   }
-// }
-=======
 module pepModule '../../utility/pep.bicep' = {
   name: 'pepModule'
   params: {
@@ -49,9 +29,9 @@ module pepModule '../../utility/pep.bicep' = {
     resourceType: resourceType
     privateEndPoint: privateEndPoint
     linkedServiceId: documentIntelligence.id
+    pepName: 'documentIntelligence'
   }
 }
->>>>>>> 2b965f8 (Serilog and Document Intelligence)
 
 resource documentIntelligence 'Microsoft.CognitiveServices/accounts@2024-04-01-preview' = {
   name: 'doc-intel-${uniquekey}'
@@ -70,7 +50,6 @@ resource documentIntelligence 'Microsoft.CognitiveServices/accounts@2024-04-01-p
   }
 }
 
-<<<<<<< HEAD
 resource documentIntelligenceEndpointSecret 'Microsoft.KeyVault/vaults/secrets@2024-04-01-preview' = {
   parent: keyvault
   name: 'documentIntelligenceEndpoint'
@@ -80,9 +59,6 @@ resource documentIntelligenceEndpointSecret 'Microsoft.KeyVault/vaults/secrets@2
 }
 
 resource documentIntelligenceKeySecret 'Microsoft.KeyVault/vaults/secrets@2024-04-01-preview' = {
-=======
-resource keyVaultSecret 'Microsoft.KeyVault/vaults/secrets@2024-04-01-preview' = {
->>>>>>> 2b965f8 (Serilog and Document Intelligence)
   parent: keyvault
   name: 'documentIntelligenceKey'
   properties: {
@@ -90,10 +66,6 @@ resource keyVaultSecret 'Microsoft.KeyVault/vaults/secrets@2024-04-01-preview' =
   }
 }
 
-<<<<<<< HEAD
 output documentIntelligenceEndpoint string = documentIntelligenceEndpointSecret.properties.secretUri
 output documentIntelligenceKey string = documentIntelligenceKeySecret.properties.secretUri
 output documentIntelligenceId string = documentIntelligence.id
-=======
-output documentIntelligenceEndpoint string = keyVaultSecret.properties.secretUri
->>>>>>> 2b965f8 (Serilog and Document Intelligence)
