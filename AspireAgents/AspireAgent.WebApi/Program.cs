@@ -1,4 +1,6 @@
+using AspireAgent.WebApi.Extensions;
 using Microsoft.Extensions.Hosting;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,12 +10,15 @@ builder.Services.AddOpenApi();
 
 builder.AddServiceDefaults();
 
+builder.AddOllamaApiClient("ollama-llama3");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
@@ -36,6 +41,8 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast");
+
+app.MapOllamaEndPoints();
 
 app.MapDefaultEndpoints();//Aspire
 
