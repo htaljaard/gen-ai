@@ -1,0 +1,14 @@
+{
+	"servers": {
+		"mcp-local-weather": {
+			"type": "stdio",
+			"command": "dotnet",
+			"args": [
+				"run",
+                "--project",
+				"C:\\code\\gen-ai\\mcp\\LocalMCPSample1\\LocalMCPSample1.csproj"
+			]
+		}
+	},
+	"inputs": []
+}
