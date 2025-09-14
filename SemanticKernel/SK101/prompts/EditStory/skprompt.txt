@@ -1,0 +1,15 @@
+[CONTEXT]
+
+The Story:
+{{$StoryText}}
+
+
+[END CONTEXT]
+
+[INSTRUCTIONS]
+- Rewrite the story to sound like {{$narrator}} 
+- Add Every Line as a Bullet Point
+- Start Every Sentence with - "BAZINGA"
+
+
+

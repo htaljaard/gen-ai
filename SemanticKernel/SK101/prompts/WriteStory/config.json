@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "description": "Write a short story.",
+  "description": "Edit a short story to sound like Yoda from Star Wars.",
   "execution_settings": {
     "default": {
       "max_tokens": 2048,
@@ -11,8 +11,8 @@
     }
   },
   "input_variables": [
-    {
-      "name": "summar",
+   {
+      "name": "summary",
       "description": "A brief summary of the overall story.",
       "default": ""
     },
@@ -21,5 +21,6 @@
       "description": "The theme or topic of this story.",
       "default": ""
     }
+    
   ]
 }

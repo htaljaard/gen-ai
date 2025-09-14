@@ -1,0 +1,1 @@
+record MathResponse(string Response, string Reasoning);
