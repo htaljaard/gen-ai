@@ -8,7 +8,7 @@ using Microsoft.SemanticKernel.Connectors.OpenAI;
 using SK101;
 
 var config = new ConfigurationBuilder()
-    .AddUserSecrets<Program>() // or your main class type
+    .AddUserSecrets<Program>()
     .Build();
 
 string AOIKEY = config["AOIKEY"]!;
@@ -18,7 +18,7 @@ var kernel = Kernel.CreateBuilder()
     .AddAzureOpenAIChatCompletion("gpt-4o", AOIENDPOINT, AOIKEY)
     .Build();
 
-#region Basic Invocation
+#region BASICS
 
 // var prompt = @"What is the capital of France?";
 
@@ -127,54 +127,108 @@ var kernel = Kernel.CreateBuilder()
 #region  LOGGING, MIDDLEWARE, NATIVE FUNCTIONS, ICHATCOMPLETION, RESPONSE FORMATTING
 
 
+// var builder = Kernel.CreateBuilder()
+// .AddAzureOpenAIChatCompletion("gpt-4o", AOIENDPOINT, AOIKEY);
+
+// builder.Services.AddLogging(_ => _.AddConsole().SetMinimumLevel(LogLevel.Information));
+
+// builder.Services.AddSingleton<IAutoFunctionInvocationFilter, FunctionLoggingMiddleware>();
+// builder.Plugins.AddFromType<MathPlugin>();
+
+// var mathKernel = builder.Build();
+
+// OpenAIPromptExecutionSettings promptExecutionSettings = new()
+// {
+//     FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(),
+//     ResponseFormat = typeof(MathResponse)
+// };
+
+// var chat = kernel.GetRequiredService<IChatCompletionService>();
+
+// //SET UP SYSTEM PROMPT
+// var history = new ChatHistory(
+//     """
+//     You are an expert math tutor. Always use the MathPlugin to answer math questions.
+//     """
+//     );
+
+// string? userInput;
+// do
+// {
+//     // Collect user input
+//     Console.Write("User > ");
+//     userInput = Console.ReadLine();
+
+//     // Add user input
+//     history.AddUserMessage(userInput);
+
+//     // 3. Get the response from the AI with automatic function calling
+//     var result = await chat.GetChatMessageContentAsync(
+//         history,
+//         executionSettings: promptExecutionSettings,
+//         kernel: mathKernel);
+
+//     // Print the results
+//     Console.WriteLine("Assistant > " + JsonSerializer.Deserialize<MathResponse>(result.Content ?? string.Empty)?.Response);
+//     Console.WriteLine("Reasoning > " + JsonSerializer.Deserialize<MathResponse>(result.Content ?? string.Empty)?.Reasoning);
+
+//     // Add the message from the agent to the chat history
+//     history.AddMessage(result.Role, result.Content ?? string.Empty);
+// } while (userInput is not null);
+
+
+#endregion
+
+
+# region IMAGE PROCESSING
+
 var builder = Kernel.CreateBuilder()
-.AddAzureOpenAIChatCompletion("gpt-4o", AOIENDPOINT, AOIKEY);
+ .AddAzureOpenAIChatCompletion("gpt-4o", AOIENDPOINT, AOIKEY);
 
 builder.Services.AddLogging(_ => _.AddConsole().SetMinimumLevel(LogLevel.Information));
 
-builder.Services.AddSingleton<IAutoFunctionInvocationFilter, FunctionLoggingMiddleware>();
-builder.Plugins.AddFromType<MathPlugin>();
-
-var mathKernel = builder.Build();
+var imageKernel = builder.Build();
 
 OpenAIPromptExecutionSettings promptExecutionSettings = new()
 {
     FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(),
-    ResponseFormat = typeof(MathResponse)
+    ResponseFormat = typeof(ImageResponse)
 };
 
 var chat = kernel.GetRequiredService<IChatCompletionService>();
 
-//SET UP SYSTEM PROMPT
-var history = new ChatHistory(
-    """
-    You are an expert math tutor. Always use the MathPlugin to answer math questions.
-    """
-    );
+var imageFiles = Directory.GetFiles("imageprocessing/sample");
 
-string? userInput;
-do
+
+
+foreach (var file in imageFiles)
 {
-    // Collect user input
-    Console.Write("User > ");
-    userInput = Console.ReadLine();
+    byte[] imageBytes = File.ReadAllBytes(file);
 
-    // Add user input
-    history.AddUserMessage(userInput);
+    var history = new ChatHistory(
+        """
+    You are an expert image analyst. Always use the ImagePlugin to answer questions about images. When Analysing an image, keep you answers brief and to the point.
+    """
+        );
 
-    // 3. Get the response from the AI with automatic function calling
-    var result = await chat.GetChatMessageContentAsync(
+    history.AddUserMessage(new ChatMessageContentItemCollection()
+    {
+        new TextContent("Analyse this image and describe what you see."),
+        new ImageContent(imageBytes, "image/png"),
+    });
+
+    var response = await chat.GetChatMessageContentAsync(
         history,
         executionSettings: promptExecutionSettings,
-        kernel: mathKernel);
+        kernel: imageKernel);
 
-    // Print the results
-    Console.WriteLine("Assistant > " + JsonSerializer.Deserialize<MathResponse>(result.Content ?? string.Empty)?.Response);
-    Console.WriteLine("Reasoning > " + JsonSerializer.Deserialize<MathResponse>(result.Content ?? string.Empty)?.Reasoning);
+    Console.WriteLine($"Image Analysis > {response.Content}");
 
-    // Add the message from the agent to the chat history
-    history.AddMessage(result.Role, result.Content ?? string.Empty);
-} while (userInput is not null);
+
+}
+
+
+
 
 
 #endregion
