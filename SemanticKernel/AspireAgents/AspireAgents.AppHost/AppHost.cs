@@ -1,16 +1,19 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var ollama = builder.AddOllama("ollama")
-                    .WithDataVolume()
-                    .WithLifetime(ContainerLifetime.Persistent)
-                    .WithContainerRuntimeArgs("--gpus=all")
-                    .WithOpenWebUI();
+//ADD EXISTING FOUNDRY
+var foundryEndPoint = builder.AddParameter("ExistingFoundryInstance");
+var foundryKey = builder.AddParameter("ExistingFoundryResourceGroup");
+var foundryModel = builder.AddParameter("FoundryModel");
 
-var llm = ollama.AddModel("llama3");
 
-builder.AddProject<Projects.AspireAgent_WebApi>("API")
-       .WithReference(llm)
-       .WithUrl("/scalar/v1", "Scalar")
-       .WaitFor(llm);
+var api = builder.AddProject<Projects.AspireAgent_WebApi>("API")
+                .WithUrlForEndpoint("https", url =>
+                    {
+                        url.DisplayText = "Scalar";
+                        url.Url = "/scalar";
+                    })
+                .WithEnvironment("OpenAI:ModelName", foundryModel)
+                .WithEnvironment("OpenAI:Endpoint", foundryEndPoint)
+                .WithEnvironment("OpenAI:ApiKey", foundryKey);
 
 builder.Build().Run();

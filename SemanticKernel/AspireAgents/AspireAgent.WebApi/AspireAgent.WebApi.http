@@ -1,6 +1,6 @@
-@AspireAgent.WebApi_HostAddress = http://localhost:5231
+@WebApi_HostAddress = http://localhost:5231
 
-GET {{AspireAgent.WebApi_HostAddress}}/weatherforecast/
+GET {{WebApi_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###

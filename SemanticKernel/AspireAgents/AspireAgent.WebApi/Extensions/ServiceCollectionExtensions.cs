@@ -3,7 +3,7 @@ using Microsoft.SemanticKernel;
 
 namespace AspireAgent.WebApi.Extensions;
 
-public static class SemanticKernelExtensions
+public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddSemanticKernel(this IServiceCollection services, IConfiguration configuration)
     {
@@ -28,4 +28,4 @@ public static class SemanticKernelExtensions
 }
 
 
-// https://blog.antosubash.com/posts/ollama-semantic-kernal-connector
+// https://blog.antosubash.com/posts/ollama-semantic-kernel-connector
