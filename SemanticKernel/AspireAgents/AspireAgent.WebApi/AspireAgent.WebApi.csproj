@@ -11,6 +11,8 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6" />
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.65.0" />
     <PackageReference Include="Microsoft.SemanticKernel.Agents.Core" Version="1.65.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Agents.Orchestration" Version="1.65.0-preview" />
+    <PackageReference Include="Microsoft.SemanticKernel.Agents.Runtime.InProcess" Version="1.65.0-preview" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureOpenAI" Version="1.65.0" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.6.0" />
   </ItemGroup>

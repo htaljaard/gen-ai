@@ -12,9 +12,15 @@ builder.Services.AddOpenApi();
 
 builder.AddServiceDefaults();
 
-builder.Services.AddSemanticKernel(builder.Configuration);
 
+
+builder.Services.AddLogging(_ => _.AddConsole().SetMinimumLevel(LogLevel.Information));
+
+
+builder.Services.AddSemanticKernel(builder.Configuration);
 builder.Services.AddSingleton<AgentService>();
+
+
 
 
 var app = builder.Build();

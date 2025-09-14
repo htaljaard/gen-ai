@@ -8,19 +8,19 @@ public static class SemanticKernelEndPoints
 {
     public static IEndpointRouteBuilder MapSemanticKernelEndPoints(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapGet("/sk/test", async (Kernel kernel) =>
-        {
-            var response = await kernel.InvokePromptAsync("What is the capital of France?");
-
-            return Results.Ok(response.GetValue<string>());
-        });
-        
 
         endpoints.MapGet("/sk/agent", async (AgentService agentService) =>
+                {
+                    var question = "What is the capital of Poland?";
+
+                    var response = await agentService.GetSingleAgentResponseAsync(question);
+
+                    return Results.Ok(response);
+                });
+
+        endpoints.MapPost("/sk/multi-agent-story", async (AgentService agentService, string Theme, string Summary) =>
         {
-            var question = "What is the capital of Poland?";
-            
-            var response = await agentService.GetSingleAgentResponseAsync(question);
+            var response = await agentService.WriteMultiAgentStory(Theme, Summary);
 
             return Results.Ok(response);
         });
