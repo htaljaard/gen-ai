@@ -2,7 +2,5 @@
   <Folder Name="/mcp/">
     <Project Path="mcp/LocalMCPSample1/LocalMCPSample1.csproj" />
   </Folder>
-  <Folder Name="/SemanticKernel/">
-    <Project Path="SemanticKernel/SK101/SK101.csproj" />
-  </Folder>
+
 </Solution>
