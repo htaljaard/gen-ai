@@ -2,5 +2,6 @@
   <Folder Name="/mcp/">
     <Project Path="mcp/LocalMCPSample1/LocalMCPSample1.csproj" />
   </Folder>
+  <Project Path="AgentFrameworkTutorial/AgentFrameworkTutorial.csproj" />
 
 </Solution>

@@ -20,11 +20,11 @@ var kernel = Kernel.CreateBuilder()
 
 #region BASICS
 
-var prompt = @"What is the capital of France?";
+// var prompt = @"What is the capital of France?";
 
-var response = await kernel.InvokePromptAsync(prompt);
+// var response = await kernel.InvokePromptAsync(prompt);
 
-Console.WriteLine(response);
+// Console.WriteLine(response);
 
 #endregion
 
@@ -140,7 +140,8 @@ Console.WriteLine(response);
 // OpenAIPromptExecutionSettings promptExecutionSettings = new()
 // {
 //     FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(),
-//     ResponseFormat = typeof(MathResponse)
+//     ResponseFormat = typeof(MathResponse),
+
 // };
 
 // var chat = kernel.GetRequiredService<IChatCompletionService>();
@@ -181,50 +182,50 @@ Console.WriteLine(response);
 
 # region IMAGE PROCESSING
 
-// var builder = Kernel.CreateBuilder()
-//  .AddAzureOpenAIChatCompletion("gpt-4o", AOIENDPOINT, AOIKEY);
+var builder = Kernel.CreateBuilder()
+ .AddAzureOpenAIChatCompletion("gpt-4o", AOIENDPOINT, AOIKEY);
 
-// builder.Services.AddLogging(_ => _.AddConsole().SetMinimumLevel(LogLevel.Information));
+builder.Services.AddLogging(_ => _.AddConsole().SetMinimumLevel(LogLevel.Information));
 
-// var imageKernel = builder.Build();
+var imageKernel = builder.Build();
 
-// OpenAIPromptExecutionSettings promptExecutionSettings = new()
-// {
-//     FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(),
-//     ResponseFormat = typeof(ImageResponse)
-// };
+OpenAIPromptExecutionSettings promptExecutionSettings = new()
+{
+    FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(),
+    ResponseFormat = typeof(ImageResponse)
+};
 
-// var chat = kernel.GetRequiredService<IChatCompletionService>();
+var chat = kernel.GetRequiredService<IChatCompletionService>();
 
-// var imageFiles = Directory.GetFiles("imageprocessing/sample");
-
-
-
-// foreach (var file in imageFiles)
-// {
-//     byte[] imageBytes = File.ReadAllBytes(file);
-
-//     var history = new ChatHistory(
-//         """
-//     You are an expert image analyst. Always use the ImagePlugin to answer questions about images. When Analysing an image, keep you answers brief and to the point.
-//     """
-//         );
-
-//     history.AddUserMessage(new ChatMessageContentItemCollection()
-//     {
-//         new TextContent("Analyse this image and describe what you see."),
-//         new ImageContent(imageBytes, "image/png"),
-//     });
-
-//     var response = await chat.GetChatMessageContentAsync(
-//         history,
-//         executionSettings: promptExecutionSettings,
-//         kernel: imageKernel);
-
-//     Console.WriteLine($"Image Analysis > {response.Content}");
+var imageFiles = Directory.GetFiles("imageprocessing/sample");
 
 
-// }
+
+foreach (var file in imageFiles)
+{
+    byte[] imageBytes = File.ReadAllBytes(file);
+
+    var history = new ChatHistory(
+        """
+    You are an expert image analyst. Always use the ImagePlugin to answer questions about images. When Analysing an image, keep you answers brief and to the point.
+    """
+        );
+
+    history.AddUserMessage(new ChatMessageContentItemCollection()
+    {
+        new TextContent("Analyse this image and describe what you see."),
+        new ImageContent(imageBytes, "image/png"),
+    });
+
+    var response = await chat.GetChatMessageContentAsync(
+        history,
+        executionSettings: promptExecutionSettings,
+        kernel: imageKernel);
+
+    Console.WriteLine($"Image Analysis > {response.Content}");
+
+
+}
 
 
 
